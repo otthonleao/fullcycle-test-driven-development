@@ -3,7 +3,11 @@ export class DateRange {
   private readonly endDate: Date;
 
   constructor(startDate: Date, endDate: Date) {
-    if (startDate > endDate) {
+    if (startDate == endDate) {
+      throw new Error('Data de início não pode ser igual à data de término');
+    }
+
+    if (endDate < startDate) {
       throw new Error('Data inicial não pode ser posterior à data de início');
     }
     this.startDate = startDate;
@@ -22,5 +26,11 @@ export class DateRange {
     const diffTime = this.endDate.getTime() - this.startDate.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return diffDays;
+  }
+
+  overlaps(other: DateRange): boolean {
+    return (
+      this.startDate < other.endDate && other.getStartDate() < this.endDate
+    );
   }
 }
